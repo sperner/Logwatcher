@@ -1,0 +1,197 @@
+.TH LOGWATCHER 1 "29 May 2013"
+
+.SH NAME
+
+logwatcher.conf, logwatcher_files.conf \- configuration files for logwatcher
+
+.SH SYNOPSIS
+
+\fBlogwatcher.conf\fP [\fBlogwatcher_files.conf\fP]
+
+.SH DESCRIPTION
+
+\fBlogwatcher\fP, the just-in-time logfile monitoring daemon, comes with two
+configuration files - one for the daemon itself and one to configure the 
+logfiles to be monitored.
+
+.SH LOGWATCHER.CONF
+
+\fBlogwatcher.conf\fP is the configuration file for the daemon function
+of logwatcher.
+
+\fBlogfiles\fP
+
+\fIinterval\fP deafult value = 100s
+.br
+the interval between each logfile parsing is defined by a number value plus
+a type - which defines the unit of the number - where the type can be:
+.br
+s - second
+.br
+m - minute
+.br
+h - hour
+.br
+D - day
+.br
+W - week
+.br
+M - month
+.br
+Y - year
+
+\fImaxnumlogfiles\fP deafult value = 100
+.br
+the maximum number of logfiles
+.br
+the absolute maximum is at ULONG_MAX (on linux-amd64: 4294967295)
+
+\fImaxlinelength\fP deafult value = 8192
+.br
+the maximum line length of logfiles
+.br
+the absolute maximum is at ULONG_MAX (on linux-amd64: 4294967295)
+
+\fImaxnumpatterns\fP deafult value = 10
+.br
+the maximum number of match patterns per file and type
+.br
+the absolute maximum is at ULONG_MAX (on linux-amd64: 4294967295)
+
+\fIlogfilesconf\fP deafult value = /etc/logwatcher_files.conf
+.br
+the path to configuration of logfiles to be watched
+.br
+the this file must exist, otherwise there is no need to start-up
+
+\fBnetwork\fP
+
+\fIport\fP deafult value = 26
+.br
+the network port to be used for listening of incoming connection
+.br
+the a port, by definition, can be between 1 and 65535
+
+\fIproto\fP deafult value = ssl
+.br
+the network protocol to be used for client connection
+.br
+the supported are: udp | tcp | ssl
+
+\fImaxnumclients\fP deafult value = 10
+.br
+the maximum number of connected network clients a time
+.br
+the absolute maximum is at ULONG_MAX (on linux-amd64: 4294967295)
+
+\fIclircvtimout\fP deafult value = 10
+.br
+the client receive timeout in seconds
+.br
+the after timeout the queue gets checked for a new element
+
+\fBoutput\fP
+
+\fIpossavefile\fP deafult value = /var/cache/logwatcher/positions
+.br
+the save file for the last reading poition of a logfile
+
+\fIdaemonlogfile\fP deafult value = /var/log/logwatcher.log
+.br
+the every output from logwatcher in daemon-mode goes here
+
+\fIloglevel\fP deafult value = 7
+.br
+the the loglevel can be between 0(emergence) - 8(debug-extended)
+.br
+the by default the loglevel is set to debug
+
+
+
+.SH LOGWATCHER_FILES.CONF
+
+\fBlogwatcher.conf\fP is the configuration file for the logfiles to be monitored
+by logwatcher.
+.br
+Every single logfile must have an entry.
+.br
+Blanks, tabstops and empty lines will be ignored.
+
+The maximum number of logfiles can be defined in the daemons configuration with
+the "maxnumlogfiles" parameter.
+.br
+To start an entry for a specific logfile, begin with its path
+\fI/var/log/any.log\fP
+.br
+Below the path entry you can define the options. Valid options and their function are:
+.br
+
+.br
+\fI  Opt Argument  \fP
+.
+.br
+   n	<Name>	to specify the name of the service
+.br
+   S	{0,1}	to specify wheather the last read position should be saved and used for the next reading as beginning
+.br
+   O	<NumL>	to specify an offset in lines which will be skipped from the beginning of the logfile
+.br
+   G   <Pat>   to specify an emergence   pattern, every line with this pattern will be handled as emergence
+.br
+   A   <Pat>   to specify an alert       pattern, every line with this pattern will be handled as alert
+.br
+   C   <Pat>   to specify a critical     pattern, every line with this pattern will be handled as critical
+.br
+   E	<Pat>	to specify an error       pattern, every line with this pattern will be handled as error
+.br
+   W	<Pat>	to specify a warning      pattern, every line with this pattern will be handled as warning
+.br
+   N   <Pat>   to specify a notice       pattern, every line with this pattern will be handled as notice
+.br
+   I	<Pat>	to specify an information pattern, every line with this pattern will be handled as information
+.br
+   D	<Pat>	to specify a debug        pattern, every line with this pattern will be handled as debug
+.br
+   !	<Pat>	to specify a skip         pattern, every line with this pattern will simply be skipped
+.br
+It is possible to define more patterns of one type by specifying everyone in a single line.
+.br
+The maximum number of patterns per type is defined in the daemon configuration with
+the "maxnumpatterns" parameter.
+
+.SS EXAMPLE
+/var/log/Xorg.0.log
+.br
+	n	Displayserver
+.br
+	S	1
+.br
+	E	(EE)
+.br
+	W	(WW)
+.br
+	N	(!!)
+.br
+	I	(II)
+.br
+	D	(DD)
+.br
+	!	NOUVEAU
+.br
+	E	Error
+
+.SH SEE ALSO
+\fB
+logwatcher(1)
+\fP
+
+.SH BUGS 
+
+No bugs are known at this time. If YOU found one, feel free to mail it to the author.
+.br
+Just a tip: Look for a proper configuration.
+
+.SH AUTHOR
+.B logwatcher
+
+has been written by Sven Sperner <sperner@stud.fh-frankfurt.de>.

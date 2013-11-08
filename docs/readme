@@ -1,0 +1,48 @@
+logwatcher readme
+
+Overview:
+
+Logwatcher is a multithreaded logfile monitoring daemon.
+It is highly configurable and provides a socket interface
+for remote connections to clients like the qtlogwatcher.
+
+
+Author:
+
+Sven Sperner		<cethss@gmail.com>
+
+
+Checkout:
+
+git clone https://github.com/sperner/Logwatcher
+
+
+Compile:
+
+cd build
+../configure
+make
+make install
+
+
+Configurations:
+
+Daemon configuration file:	logwatcher.conf
+Logfiles configuration file:	logwatcher_files.conf
+
+
+Usage:
+
+logwatcher -[clovitdh]
+
+
+Options:
+
+-c (--conf)    path to logwatcher conf
+-l (--lconf)   path to logfiles conf
+-o (--logfile) path to logwatchers logfile
+-v (--loglevel)output- / log-level
+-i (--interval)parsing interval
+-t (--tmpfile) path to logwatchers possavefile
+-d (--daemon)  start logwatcher as daemon
+-h (--help)    this help

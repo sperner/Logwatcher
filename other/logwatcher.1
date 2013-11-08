@@ -1,0 +1,72 @@
+.TH LOGWATCHER 1 "29 May 2013"
+
+.SH NAME
+
+logwatcher \- just-in-time logwatcher with socket interface
+
+.SH SYNOPSIS
+
+\fBlogwatcher\fP [\fIoptions\fP]
+
+.SH DESCRIPTION
+
+\fBlogwatcher\fP is a configurable just-in-time logfile monitoring daemon
+and has the ability to send messages in order to inform the user or
+administrator about system relevant events.
+
+.SH PLATFORMS
+
+\fBlogwatcher\fP is, at this time, only tested under linux, but should
+be compileable and runnable on several unix-like operatingsystems.
+
+.SH OPTIONS
+
+\fBlogwatcher\fP provides a number of commandline options:
+
+\fI\-h, \-\-help\fP
+Help: show available flags.
+
+\fI\-c, \-\-conf\fP <path to logwatcher.conf>
+Select a configuration file for the daemons options.
+
+\fI\-l, \-\-lconf\fP <path to logwatcher.conf.files>
+Select a configuration file for the monitored logfiles.
+
+\fI\-o, \-\-logfile\fP <path to output logfile>
+Select a logfile for logwatchers output.
+
+\fI\-v, \-\-loglevel\-color\fP <0-7>
+Select the loglevel of logwatcher.
+
+\fI\-i, \-\-interval\fP <parsing interval[smhDMY]>
+Select a time for the interval after which the
+monitored logfiles will get parsed.
+
+\fI\-t, \-\-tmpfile\fP <path to position file>
+Select a file in which logwatcher will write the
+last read positions from monitored logfiles.
+
+\fI\-d, \-\-daemon\fP
+To run logwatcher in daemon mode.
+
+.SH SIGNALS
+
+\fBlogwatcher\fP provides the use of signal SIGUSR1 (10) to reread
+the configuration files.
+
+
+.SH SEE ALSO
+\fB
+logwatcher.conf(1)
+\fP
+
+.SH BUGS 
+
+No bugs are known at this time. If YOU found one, feel free to mail it to the author.
+.br
+Just a tip: Look for a proper configuration.
+
+.SH AUTHOR
+.B logwatcher
+
+has been written by Sven Sperner <sperner@stud.fh-frankfurt.de>.
