@@ -31,6 +31,8 @@ DEPEND="sys-devel/autoconf
 #}
 
 src_install() {
+	dobin logwatcher
+
 	insinto /etc
 	doins config/logwatcher.conf
 	doins config/logwatcher_files.conf
