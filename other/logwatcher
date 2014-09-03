@@ -3,25 +3,22 @@
 # description: System-V Init-Script for Logwatcher
 #
 # Get function from functions library
-. /etc/init.d/functions
+. /etc/init.d/functions.sh
 
 # Start the service logwatcher
 start() {
-        initlog -c "echo -n Starting logwatcher server: "
-        /usr/bin/logwatcher -d
-        ### Create the lock file ###
-        touch /var/lock/logwatcher
-        success $"logwatcher server startup"
-        echo
+	ebegin "Starting ${SVCNAME}"
+	start-stop-daemon --start --quiet --exec /usr/bin/logwatcher -- -d
+	touch /var/lock/logwatcher
+	eend $?
 }
 
 # Restart the service logwatcher
 stop() {
-        initlog -c "echo -n Stopping logwatcher server: "
-        killproc logwatcher
-        ### Now, delete the lock file ###
-        rm -f /var/lock/logwatcher
-        echo
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon --stop --quiet --exec /usr/bin/logwatcher
+	rm -f /var/lock/logwatcher
+	eend $?
 }
 
 ### main logic ###
@@ -33,7 +30,7 @@ case "$1" in
         stop
         ;;
   status)
-        status logwatcher
+        status
         ;;
   restart|reload|condrestart)
         stop

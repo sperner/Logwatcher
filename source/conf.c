@@ -30,6 +30,8 @@ int initDaemonConfig( struct daemonConfig *newDaemonConf )
         newDaemonConf->maxlinelength = MAX_LINE_LEN;
         newDaemonConf->maxnumlogfiles = MAX_NUM_FILES;
         newDaemonConf->maxnumpatterns = MAX_NUM_PATTERNS;
+        newDaemonConf->daemonconf = malloc( strlen(DAEMON_CONF_FILE)+1 );
+        strcpy( newDaemonConf->daemonconf, DAEMON_CONF_FILE );
         newDaemonConf->logfilesconf = malloc( strlen(LOGS_CONF_FILE)+1 );
         strcpy( newDaemonConf->logfilesconf, LOGS_CONF_FILE );
         newDaemonConf->port =      NETWORK_PORT;

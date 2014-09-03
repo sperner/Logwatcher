@@ -40,6 +40,8 @@ src_install() {
 	exeinto /etc/init.d
 	doexe other/logwatcher
 
+	dodir /var/cache/logwatcher
+
 #	doicon logwatcher.png
 #	domenu logwatcher.desktop
 	dodoc docs/{authors,changelog,install,license,news,readme}
