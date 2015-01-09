@@ -1,0 +1,9 @@
+[Unit]
+Description=Multi-threaded just-in-time logwatcher
+After=syslog.target
+
+[Service]
+ExecStart=/usr/local/bin/logwatcher
+
+[Install]
+WantedBy=multi-user.target
