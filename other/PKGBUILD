@@ -42,6 +42,9 @@ package()
 	mkdir -p "$pkgdir"/usr/local/man/man1 || return 1
 	cp other/{logwatcher.1,logwatcher.conf.1} "$pkgdir"/usr/local/man/man1/ || return 1
 
+	mkdir -p "$pkgdir"/var/cache/logwatcher
+	touch "$pkgdir"/var/cache/logwatcher/positions
+
 #	mkdir -p "$pkgdir"/etc/init.d || return 1
 #	cp other/logwatcher "$pkgdir"/etc/init.d/ || return 1
 }
