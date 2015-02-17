@@ -1,5 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 2013 All rights reserved
 # Distributed under the terms of the GNU General Public License v2
+# app-admin/logwatcher
 # $Header: $
 
 EAPI=4
