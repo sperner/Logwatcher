@@ -12,17 +12,30 @@ Author:
 Sven Sperner		<cethss@gmail.com>
 
 
-Checkout:
+Installation (standard way):
+	Checkout:
 
-git clone https://github.com/sperner/Logwatcher
+	git clone https://github.com/sperner/Logwatcher
 
 
-Compile:
+	Compile:
 
-cd build
-../configure
-make
-make install
+	cd build
+	../configure
+	make
+	make install
+
+
+Instalation (package management):
+
+	Gentoo:
+
+	Use included ebuild
+
+
+	Arch:
+
+	Use included PKGBUiLD
 
 
 Configurations:
@@ -46,3 +59,11 @@ Options:
 -t (--tmpfile) path to logwatchers possavefile
 -d (--daemon)  start logwatcher as daemon
 -h (--help)    this help
+
+
+Signals:
+
+SIGINT	- Exit after current cyce
+SIGUSR1	- Reread the configuration
+SIGUSR2	- Change timestamp format
+
