@@ -5,21 +5,36 @@
 # Get function from functions library
 . /etc/init.d/functions.sh
 
+#servicename=${SVCNAME}
+servicename=logwatcher
+
 # Start the service logwatcher
 start() {
-	ebegin "Starting ${SVCNAME}"
+	ebegin "Starting $servicename"
 	start-stop-daemon --start --quiet --exec /usr/bin/logwatcher -- -d
-	touch /var/lock/logwatcher
+	touch /var/lock/$servicename
 	eend $?
 }
 
 # Restart the service logwatcher
 stop() {
-	ebegin "Stopping ${SVCNAME}"
+	ebegin "Stopping $servicename"
 	start-stop-daemon --stop --quiet --exec /usr/bin/logwatcher
-	rm -f /var/lock/logwatcher
+	rm -f /var/lock/$servicename
 	eend $?
 }
+
+# Get services status
+status() {
+	echo -n "$servicename is ... "
+	if [[ -e /var/lock/$servicename ]]
+	then
+		echo -n "locked and "
+	fi
+	pidof $servicename 1>/dev/null && echo "running ($(pidof $servicename))" || echo "dead"
+	eend $?
+}
+
 
 ### main logic ###
 case "$1" in
