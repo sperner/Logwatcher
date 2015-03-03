@@ -1,0 +1,140 @@
+@version: 3.4
+# Copyright 2005-2011 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/app-admin/syslog-ng/files/syslog-ng.conf.gentoo.hardened.3.2,v 1.1 2011/01/18 17:44:14 mr_bones_ Exp $
+
+#
+# Syslog-ng configuration file, compatible with default hardened installations.
+#
+# Facilities: auth, auth-priv, cron, daemon, ftp, kern, lpr, mail, mark, news, syslog, user, uucp, local0 - local7
+#
+
+options {
+	threaded(yes);
+	chain_hostnames(no);
+	# The default action of syslog-ng is to log a STATS line
+	# to the file every 10 minutes.  That's pretty ugly after a while.
+	# Change it to every 12 hours so you get a nice daily update of
+	# how many messages syslog-ng missed (0).
+	stats_freq(43200);
+	# The default action of syslog-ng is to log a MARK line
+	# to the file every 20 minutes.  That's seems high for most
+	# people so turn it down to once an hour.  Set it to zero
+	# if you don't want the functionality at all.
+	mark_freq(3600);
+};
+
+source src {
+    unix-stream("/dev/log");
+    internal();
+};
+source kernsrc {
+    file("/proc/kmsg");
+};
+
+#source net { udp(); };
+#log { source(net); destination(net_logs); };
+#destination net_logs { file("/var/log/HOSTS/$HOST/$YEAR$MONTH$DAY.log"); };
+
+destination authlog { file("/var/log/auth.log"); };
+destination _syslog { file("/var/log/syslog"); };
+destination cron { file("/var/log/cron.log"); };
+destination daemon { file("/var/log/daemon.log"); };
+destination ftp { file("/var/log/ftp.log"); };
+destination kern { file("/var/log/kern.log"); file("/dev/tty12"); };
+destination lpr { file("/var/log/lpr.log"); };
+destination user { file("/var/log/user.log"); };
+destination uucp { file("/var/log/uucp.log"); };
+#destination ppp { file("/var/log/ppp.log"); };
+destination mail { file("/var/log/mail.log"); };
+
+destination avc { file("/var/log/avc.log"); };
+destination audit { file("/var/log/audit.log"); };
+destination pax { file("/var/log/pax.log"); };
+destination grsec { file("/var/log/grsec.log"); };
+
+destination mailinfo { file("/var/log/mail.info"); };
+destination mailwarn { file("/var/log/mail.warn"); };
+destination mailerr { file("/var/log/mail.err"); };
+destination newscrit { file("/var/log/news/news.crit"); };
+destination newserr { file("/var/log/news/news.err"); };
+destination newsnotice { file("/var/log/news/news.notice"); };
+
+destination debug { file("/var/log/debug"); };
+destination messages { file("/var/log/messages"); };
+destination console { usertty("root"); };
+destination console_all { file("/dev/tty12"); };
+#destination loghost { udp("loghost" port(999)); };
+destination xconsole { pipe("/dev/xconsole"); };
+
+destination iptables { file("/var/log/iptables.log"); };
+destination openvpn { file("/var/log/openvpn.log"); };
+destination vdr { file("/var/log/vdr.log"); };
+
+
+filter f_auth { facility(auth); };
+filter f_authpriv { facility(auth, authpriv); };
+filter f_syslog { not facility(authpriv, mail)
+	and not program(vdr) and not program(openvpn); };
+filter f_cron { facility(cron); };
+filter f_daemon { facility(daemon) and not program(openvpn); };
+filter f_ftp { facility(ftp); };
+filter f_kern { facility(kern) and not filter(f_iptables); };
+filter f_lpr { facility(lpr); };
+filter f_mail { facility(mail); };
+filter f_user { facility(user) and not program(vdr); };
+filter f_uucp { facility(uucp); };
+#filter f_ppp { facility(ppp); };
+filter f_news { facility(news); };
+filter f_debug { not facility(auth, authpriv, news, mail); };
+filter f_messages { level(info..warn) 
+	and not facility(auth, authpriv, mail, news)
+	and not program(vdr) and not program( openvpn); };
+
+filter f_emergency { level(emerg); };
+filter f_info { level(info); };
+filter f_notice { level(notice); };
+filter f_warn { level(warn); };
+filter f_crit { level(crit); };
+filter f_err { level(err); };
+
+filter f_avc { message(".*avc: .*"); };
+filter f_audit { message("^(\\[.*\..*\] |)audit.*") and not message(".*avc: .*"); };
+filter f_pax { message("^(\\[.*\..*\] |)PAX:.*"); };
+filter f_grsec { message("^(\\[.*\..*\] |)grsec:.*"); };
+
+filter f_iptables { match("IN=[A-Za-z0-9\.]* OUT=[A-Za-z0-9\.]*" value("MESSAGE")); };
+filter f_openvpn{ program(openvpn); };
+filter f_vdr { program(vdr); };
+
+
+log { source(src); filter(f_authpriv); destination(authlog); };
+log { source(src); filter(f_syslog); destination(_syslog); };
+log { source(src); filter(f_cron); destination(cron); };
+log { source(src); filter(f_daemon); destination(daemon); };
+log { source(src); filter(f_ftp); destination(ftp); };
+log { source(kernsrc); filter(f_kern); destination(kern); };
+log { source(src); filter(f_lpr); destination(lpr); };
+log { source(src); filter(f_mail); destination(mail); };
+log { source(src); filter(f_user); destination(user); };
+log { source(src); filter(f_uucp); destination(uucp); };
+log { source(kernsrc); filter(f_pax); destination(pax); };
+log { source(kernsrc); filter(f_grsec); destination(grsec); };
+log { source(kernsrc); filter(f_audit); destination(audit); };
+log { source(kernsrc); filter(f_avc); destination(avc); };
+log { source(src); filter(f_mail); filter(f_info); destination(mailinfo); };
+log { source(src); filter(f_mail); filter(f_warn); destination(mailwarn); };
+log { source(src); filter(f_mail); filter(f_err); destination(mailerr); };
+log { source(src); filter(f_news); filter(f_crit); destination(newscrit); };
+log { source(src); filter(f_news); filter(f_err); destination(newserr); };
+log { source(src); filter(f_news); filter(f_notice); destination(newsnotice); };
+log { source(src); filter(f_debug); destination(debug); };
+log { source(src); filter(f_messages); destination(messages); };
+log { source(src); filter(f_emergency); destination(console); };
+#log { source(src); filter(f_ppp); destination(ppp); };
+log { source(src); destination(console_all); };
+
+log { source(kernsrc); filter(f_iptables); destination(iptables); };
+log { source(src); filter(f_openvpn); destination(openvpn); };
+log { source(src); filter(f_vdr); destination(vdr); };
+
