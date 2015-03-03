@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/sbin/runscript
+##!/bin/bash
 #
 # description: System-V Init-Script for Logwatcher
 #
@@ -7,6 +8,12 @@
 
 #servicename=${SVCNAME}
 servicename=logwatcher
+
+depend() {
+	need localmount net
+	use dns
+	after bootmisc
+}
 
 # Start the service logwatcher
 start() {
@@ -37,22 +44,22 @@ status() {
 
 
 ### main logic ###
-case "$1" in
-  start)
-        start
-        ;;
-  stop)
-        stop
-        ;;
-  status)
-        status
-        ;;
-  restart|reload|condrestart)
-        stop
-        start
-        ;;
-  *)
-        echo $"Usage: $0 {start|stop|restart|reload|status}"
-        exit 1
-esac
-exit 0
+#case "$1" in
+#  start)
+#        start
+#        ;;
+#  stop)
+#        stop
+#        ;;
+#  status)
+#        status
+#        ;;
+#  restart|reload|condrestart)
+#        stop
+#        start
+#        ;;
+#  *)
+#        echo $"Usage: $0 {start|stop|restart|reload|status}"
+#        exit 1
+#esac
+#exit 0
