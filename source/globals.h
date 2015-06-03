@@ -50,12 +50,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_NUM_FILES    100    // max number of logfiles to be opened
 #define MAX_NUM_PATTERNS  10    // max number of keywords for file parsing
 #define MAX_NUM_CLIENTS   10    // max number of possible network connections
-#define CLI_RCV_TIMEOUT   10    // client receive timeout in seconds
+#define CLI_RCV_TIMEOUT    2    // client receive timeout in seconds
 #define MAX_BUF_SIZE    1400    // max buffer size for network packets
 #define NETWORK_PORT      26    // default network port for listening
 #define DEF_PROTO       "tcp"   // default network protocol
-#define DEF_INTERVAL     100    // default interval for parsing logfiles
-#define DEF_LOG_LEVEL      9    // default log level (unused level)
+#define DEF_INTERVAL       3    // default interval for parsing logfiles
+#define DEF_LOG_LEVEL      3    // default log level (unused level)
 
 // syslog message severity levels as described in rfc 5424
 #define MSGEMERG    0           // severity level (G) emergency: system is unusable
