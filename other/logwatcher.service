@@ -1,9 +1,13 @@
 [Unit]
 Description=Multi-threaded just-in-time logwatcher
+Documentation=man:logwatcher(1)
 After=syslog.target
 
 [Service]
-ExecStart=/usr/local/bin/logwatcher
+Type=forking
+ExecStart=/usr/local/bin/logwatcher -d
+ExecReload=/usr/bin/kill -9 $MAINPID
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
